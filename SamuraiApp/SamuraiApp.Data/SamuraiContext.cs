@@ -33,6 +33,8 @@ namespace SamuraiApp.Data
         {
             modelBuilder.Entity<SamuraiBattle>()
                 .HasKey(s => new { s.SamuraiId, s.BattleId });
+
+            
             base.OnModelCreating(modelBuilder);
         }
     }
