@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
 using SamuraiApp.Domain;
@@ -8,32 +7,33 @@ namespace SamuraiApp.Data
 {
     public class SamuraiContext:DbContext
     {
-        public SamuraiContext(DbContextOptions<SamuraiContext> options)
-            : base(options)
-        { }
+
+        public static readonly LoggerFactory MyConsoleLoggerFactory
+            = new LoggerFactory(new[] {
+              new ConsoleLoggerProvider((category, level)
+                => category == DbLoggerCategory.Database.Command.Name
+               && level == LogLevel.Information, true) });
+     //   public static readonly LoggerFactory MyConsoleLoggerFactory
+     //= new LoggerFactory(new[] { new ConsoleLoggerProvider((_, __) => true, true) });
 
         public DbSet<Samurai> Samurais { get; set; }
         public DbSet<Quote> Quotes { get; set; }
         public DbSet<Battle> Battles { get; set; }
 
-        protected override void OnModelCreating
-            (ModelBuilder modelBuilder)
-        {
-            
-
-            modelBuilder.Entity<SamuraiBattle>()
-                .HasKey(s => new { s.BattleId,
-                                   s.SamuraiId });
-        }
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            IServiceCollection serviceCollection = new ServiceCollection();
-            serviceCollection.AddLogging(builder => builder
-                .AddConsole()
-                .AddFilter(level => level >= LogLevel.Information)
-            );
-            var loggerFactory = serviceCollection.BuildServiceProvider().GetService<ILoggerFactory>();
+            optionsBuilder
+                .UseLoggerFactory(MyConsoleLoggerFactory)
+                .EnableSensitiveDataLogging(true)
+                .UseSqlServer(
+                 "Server = (localdb)\\mssqllocaldb; Database = SamuraiAppData; Trusted_Connection = True; ");
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<SamuraiBattle>()
+                .HasKey(s => new { s.SamuraiId, s.BattleId });
+            base.OnModelCreating(modelBuilder);
         }
     }
 }
