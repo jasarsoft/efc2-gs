@@ -11,9 +11,10 @@ using System;
 namespace SamuraiApp.Data.Migrations
 {
     [DbContext(typeof(SamuraiContext))]
-    partial class SamuraiContextModelSnapshot : ModelSnapshot
+    [Migration("20201104185330_initial")]
+    partial class initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
