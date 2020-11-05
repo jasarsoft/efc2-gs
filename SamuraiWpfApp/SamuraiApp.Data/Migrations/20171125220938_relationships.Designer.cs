@@ -11,9 +11,10 @@ using System;
 namespace SamuraiApp.Data.Migrations
 {
     [DbContext(typeof(SamuraiContext))]
-    partial class SamuraiContextModelSnapshot : ModelSnapshot
+    [Migration("20171125220938_relationships")]
+    partial class relationships
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,13 +67,13 @@ namespace SamuraiApp.Data.Migrations
 
             modelBuilder.Entity("SamuraiApp.Domain.SamuraiBattle", b =>
                 {
-                    b.Property<int>("BattleId");
-
                     b.Property<int>("SamuraiId");
 
-                    b.HasKey("BattleId", "SamuraiId");
+                    b.Property<int>("BattleId");
 
-                    b.HasIndex("SamuraiId");
+                    b.HasKey("SamuraiId", "BattleId");
+
+                    b.HasIndex("BattleId");
 
                     b.ToTable("SamuraiBattle");
                 });

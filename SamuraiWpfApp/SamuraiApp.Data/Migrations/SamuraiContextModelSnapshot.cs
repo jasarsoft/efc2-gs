@@ -66,13 +66,13 @@ namespace SamuraiApp.Data.Migrations
 
             modelBuilder.Entity("SamuraiApp.Domain.SamuraiBattle", b =>
                 {
-                    b.Property<int>("BattleId");
-
                     b.Property<int>("SamuraiId");
 
-                    b.HasKey("BattleId", "SamuraiId");
+                    b.Property<int>("BattleId");
 
-                    b.HasIndex("SamuraiId");
+                    b.HasKey("SamuraiId", "BattleId");
+
+                    b.HasIndex("BattleId");
 
                     b.ToTable("SamuraiBattle");
                 });
